@@ -1,3 +1,4 @@
+require 'logger'
 class ArticlesController < ApplicationController
   include ArticlesHelper
   def index
@@ -27,8 +28,12 @@ class ArticlesController < ApplicationController
     @article = Article.find(params[:id])
   end
   def update
+    log = Logger.new("application.log", 'monthly')
     @article = Article.find(params[:id])
+    log.debug ("Before: #{@article.attributes.inspect}")
     @article.update(article_params)
+    log.debug("Returns: #{@article.attributes.inspect}")
+    log.debug ("After: #{Article.find(3).attributes.inspect}")
     flash.notice = "Article '#{@article.title}' Updated!"
     redirect_to article_path(@article)
   end
